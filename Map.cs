@@ -3,7 +3,7 @@ namespace Sky
 {
 	public class Map
 	{
-		private const int _size = 3;
+		private const int _size = 4;
 		private int _max = _size - 1;
 
 		private readonly int[][] _res =
