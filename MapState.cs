@@ -2,13 +2,16 @@
 {
     public struct MapState
     {
+        private const int _size = 4;
+        private const int _max = 3;
+
         private int AA, AB, AC, AD,
                     BA, BB, BC, BD,
                     CA, CB, CC, CD,
                     DA, DB, DC, DD;
 
         public MapState(MapState map)
-        {
+        {            
             AA = map.AA; AB = map.AB; AC = map.AC; AD = map.AD;
             BA = map.BA; BB = map.BB; BC = map.BC; BD = map.BD;
             CA = map.CA; CB = map.CB; CC = map.CC; CD = map.CD;
@@ -40,6 +43,10 @@
                 case 3 when y == 3: DD = val; break;
             }                
         }
+        
+        public void SetLine(int line)
+        {
 
+        }
     }
 }
