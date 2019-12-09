@@ -1,18 +1,40 @@
 using System;
+using System.Collections.Generic;
+
 namespace Sky
 {
-	public class Map
+	public class Brain
 	{
+		// 1 - 4 * * * (~6)
+		
+		// 2 - 1 4 * * (2)
+		//   - 2 4 * * (2)
+		//   - 2 1 4 3
+		//   - 3 4 * * (2)
+		//   - 3 * 4 * (2)
+		//   - 3 * * 4 (2)
+
+		// 3 - 1 2 4 3
+		// 3 - 1 3 4 2
+		// 3 - 1 3 2 4
+		// 3 - 2 1 3 4
+		// 3 - 2 3 1 4
+		// 3 - 2 3 4 1
+
+		// 4 - 1 2 3 4
+
 		private const int _size = 4;
 		private int _max = _size - 1;
-
-		private readonly int[][] _res =
-		{
-			new int[] { 0, 0, 0, 0 },
-			new int[] { 0, 0, 0, 0 },
-			new int[] { 0, 0, 0, 0 },
-			new int[] { 0, 0, 0, 0 }
-		};
+		
+		private Stack<MapState> _mem = new Stack<MapState>();
+		private MapState _res;
+		//private int[][] _res =
+		//{
+		//	new int[] { 0, 0, 0, 0 },
+		//	new int[] { 0, 0, 0, 0 },
+		//	new int[] { 0, 0, 0, 0 },
+		//	new int[] { 0, 0, 0, 0 }
+		//};
 
 		public bool Check()
 		{
@@ -31,6 +53,7 @@ namespace Sky
 		}
 		public void Show()
 		{
+			Console.WriteLine(new string('-', 20));										
 			for (int i = 0; i < _size; i++)
 			{
 				for (int j = 0; j < _size; j++)
@@ -41,10 +64,10 @@ namespace Sky
 				Console.WriteLine();
 			}
 		}
-		public void Set(int x, int y, int val)
-		{
-			_res[x][y] = val;
-		}
+		//public void Set(int x, int y, int val)
+		//{
+		//	_res[x][y] = val;
+		//}
 
 		public void SetForAll(int n)
 		{
@@ -125,7 +148,24 @@ namespace Sky
 					case _size: SetForAll(i);
 						break;
 				}
+
+				if (arr[i] != 0)
+				{
+					Console.Write($"#{arr[i]} on pos {i}");
+					Show();
+					Save();
+				}
 			}
+		}
+
+		public void Save()
+		{
+			_mem.Push(_res);
+		}
+
+		public void Back()
+		{
+			_res = _mem.Pop();
 		}
 	}
 }
