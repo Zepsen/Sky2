@@ -1,66 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Sky.Memento
 {
     public interface IMemento
     {
-        int[] GetState();
+        int[,] GetState();
     }
 
     public class MapState : IMemento
     {
-        private readonly int[] _state;
-        public MapState(int[] state)
+        private readonly int[,] _state = new int[,] { };
+        public MapState(int[,] state)
         {
-            this._state = (int[])state.Clone();
+            _state = (int[,])state.Clone();
         }
 
-        public int[] GetState()
+        public int[,] GetState()
         {
             return this._state;
         }
     }
 
-    public class Map
-    {
-        private int[] map;
-
-        public Map(int[] map)
-        {
-            this.map = map;
-        }
-
-        public IMemento Save()
-        {
-            return new MapState(this.map);
-        }
-
-        internal void Display()
-        {
-            for (int i = 0; i < this.map.Length; i++)
-            {
-                Console.Write(this.map[i]);                
-            }
-            Console.WriteLine();
-            Console.WriteLine(new string('-',20));
-        }
-
-        public void Restore(IMemento memento)
-        {
-            this.map = memento.GetState();
-        }
-
-        public void Set(int x, int val)
-        {
-            this.map[x] = val;
-        }
-    }
-
+    /// <summary>
+    /// Caretaker for memento
+    /// </summary>
     public class MapHistory
     {
-        private Stack<IMemento> history = new Stack<IMemento>();
-        private Map origin;
+        private readonly Stack<IMemento> history = new Stack<IMemento>();
+        private readonly Map origin;
 
         public MapHistory(Map origin)
         {
@@ -76,6 +45,16 @@ namespace Sky.Memento
         {
             var map = history.Pop();
             this.origin.Restore(map);
+        }
+
+        public void Display()
+        {
+            var arr = history.ToList();
+            foreach (var item in arr)
+            {
+                var state = new Map(item.GetState());
+                state.Show();
+            }
         }
     }
 }
