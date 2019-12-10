@@ -26,7 +26,15 @@ namespace Sky.Memento
 
         public void Set(int x, int y, int val)
         {
-            _map[x, y] = val;
+            if (Check(x, y, val))
+            {
+                _map[x, y] = val;
+                Console.WriteLine($"Set x{x} y{y} - {val}");                
+            } 
+            else
+            {
+                Console.WriteLine($"Already value in line x{x} y{y} - val{val}");                
+            }
         }
 
         internal void Default(int[] arr)
@@ -65,16 +73,13 @@ namespace Sky.Memento
             }
         }
 
-        public bool Check()
+        public bool Check(int x, int y, int val)
         {
             for (int i = 0; i < _size; i++)
             {
-                for (int j = 0; j < _size; j++)
+                if(_map[x, i] == val || _map[i, y] == val)
                 {
-                    if (_map[i, j] == 0)
-                    {
-                        return false;
-                    }
+                    return false;
                 }
             }
 
@@ -92,28 +97,32 @@ namespace Sky.Memento
                 case 0:
                     for (int i = 0; i < _size; i++)
                     {
-                        _map[i, v] = val++;
+                        //_map[i, v] = val++;
+                        Set(i, v, val++);
                     }
                     break;
 
                 case 1:
                     for (int i = _max; i >= 0; i--)
                     {
-                        _map[v, i] = val++;
+                        //_map[v, i] = val++;
+                        Set(v, i, val++);
                     }
                     break;
 
                 case 2:
                     for (int i = _max; i >= 0; i--)
                     {
-                        _map[i, _max - v] = val++;
+                        //_map[i, _max - v] = val++;
+                        Set(i, _max - v, val++);
                     }
                     break;
 
                 case 3:
                     for (int i = 0; i < _size; i++)
                     {
-                        _map[_max - v, i] = val++;
+                        //_map[_max - v, i] = val++;
+                        Set(_max - v, i, val++);
                     }
                     break;
 
@@ -129,19 +138,23 @@ namespace Sky.Memento
             switch (side)
             {
                 case 0:
-                    _map[0, v] = _size;
+                    //_map[0, v] = _size;
+                    Set(0, v, _size);
                     break;
 
                 case 1:
-                    _map[v, _max] = _size;
+                    //_map[v, _max] = _size;
+                    Set(v, _max, _size);
                     break;
 
                 case 2:
-                    _map[_max, _max - v] = _size;
+                    //_map[_max, _max - v] = _size;
+                    Set(_max, _max - v, _size);
                     break;
 
                 case 3:
-                    _map[_max - v, 0] = _size;
+                    //_map[_max - v, 0] = _size;
+                    Set(_max - v, 0, _size);
                     break;
 
                 default:
