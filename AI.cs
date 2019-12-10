@@ -25,8 +25,12 @@ namespace Sky
             //Set 100%
             map.Default(arr);
             history.Backup();
-            map.Show();      
-            
+            map.Show();
+
+            map.Set(1, 1, 1);
+            map.Have3();
+            map.Show();
+                        
 
         }
     }

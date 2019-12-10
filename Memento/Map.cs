@@ -30,13 +30,9 @@ namespace Sky.Memento
             {
                 _map[x, y] = val;
                 Console.WriteLine($"Set x{x} y{y} - {val}");                
-            } 
-            else
-            {
-                Console.WriteLine($"Already value in line x{x} y{y} - val{val}");                
-            }
+            }             
         }
-
+        
         internal void Default(int[] arr)
         {
             for (int i = 0; i < arr.Length; i++)
@@ -59,6 +55,64 @@ namespace Sky.Memento
             }
         }
 
+        internal void Have3()
+        {
+            for (int i = 0; i < _size; i++)
+            {
+                var countX = 0;
+                var countY = 0;
+                for (int j = 0; j < _size; j++)
+                {
+                    if (_map[i, j] > 0) countX++;
+                    if (_map[j, i] > 0) countY++;
+                }
+
+                if(countX == 3)
+                {
+                    SetLineFor3X(i);
+                }
+
+                if(countY == 3)
+                {
+                    SetLineFor3Y(i);
+                }
+            }
+        }
+
+        private void SetLineFor3X(int i)
+        {
+            Console.WriteLine($"I think this line must have 3 line{i}");
+            var line = GetLine(i);
+            Console.WriteLine(string.Join(' ', line));
+        }
+
+        private void SetLineFor3Y(int i)
+        {
+            Console.WriteLine($"I think this column must have 3 line{i}");
+        }
+
+        private int[] GetLine(int nline)
+        {
+            var line = new int[4];
+            for (int i = 0; i < _size; i++)
+            {
+                line[i] = _map[nline, i];
+            }
+
+            return line;
+        }
+
+        private int[] GetColumn(int ncol)
+        {
+            var col = new int[4];
+            for (int i = 0; i < _size; i++)
+            {
+                col[i] = _map[i, ncol];
+            }
+
+            return col;
+        }
+
         public void Show()
         {
             Console.WriteLine(new string('-', 20));
@@ -75,10 +129,18 @@ namespace Sky.Memento
 
         public bool Check(int x, int y, int val)
         {
+            if(_map[x,y] != 0)
+            {
+                Console.WriteLine("Value already set for this");
+                return false;
+            }
+
+
             for (int i = 0; i < _size; i++)
             {
                 if(_map[x, i] == val || _map[i, y] == val)
                 {
+                    Console.WriteLine($"Already value in line x{x} y{y} - val{val}");                
                     return false;
                 }
             }
@@ -128,7 +190,7 @@ namespace Sky.Memento
 
                 default:
                     throw new ArgumentException();
-            }
+            }            
         }
 
         public void SetFor1(int n)
