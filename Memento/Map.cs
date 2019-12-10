@@ -59,15 +59,19 @@ namespace Sky.Memento
         {
             for (int i = 0; i < _size; i++)
             {
+                //var line = GetLine(i);
+                //var column = GetColumn(i);
+
                 var countX = 0;
                 var countY = 0;
+
                 for (int j = 0; j < _size; j++)
                 {
                     if (_map[i, j] > 0) countX++;
                     if (_map[j, i] > 0) countY++;
                 }
 
-                if(countX == 3)
+                if (countX == 3)
                 {
                     SetLineFor3X(i);
                 }

@@ -30,7 +30,6 @@ namespace Sky
             map.Set(1, 1, 1);
             map.Have3();
             map.Show();
-                        
 
         }
     }
