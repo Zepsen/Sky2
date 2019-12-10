@@ -26,7 +26,7 @@ namespace Sky.Memento
 
         public void Set(int x, int y, int val)
         {
-            _map[x,y] = val;
+            _map[x, y] = val;
         }
 
         public void Show()
@@ -36,7 +36,7 @@ namespace Sky.Memento
             {
                 for (int j = 0; j < _size; j++)
                 {
-                    Console.Write(" " + _map[i,j]);
+                    Console.Write(" " + _map[i, j]);
                 }
 
                 Console.WriteLine();
@@ -49,7 +49,7 @@ namespace Sky.Memento
             {
                 for (int j = 0; j < _size; j++)
                 {
-                    if (_map[i,j] == 0)
+                    if (_map[i, j] == 0)
                     {
                         return false;
                     }
@@ -70,28 +70,28 @@ namespace Sky.Memento
                 case 0:
                     for (int i = 0; i < _size; i++)
                     {
-                        _map[i,v] = val++;
+                        _map[i, v] = val++;
                     }
                     break;
 
                 case 1:
                     for (int i = _max; i >= 0; i--)
                     {
-                        _map[v,i] = val++;
+                        _map[v, i] = val++;
                     }
                     break;
 
                 case 2:
                     for (int i = _max; i >= 0; i--)
                     {
-                        _map[i,_max - v] = val++;
+                        _map[i, _max - v] = val++;
                     }
                     break;
 
                 case 3:
                     for (int i = 0; i < _size; i++)
                     {
-                        _map[_max - v,i] = val++;
+                        _map[_max - v, i] = val++;
                     }
                     break;
 
@@ -107,28 +107,25 @@ namespace Sky.Memento
             switch (side)
             {
                 case 0:
-                    _map[0,v] = _size;
+                    _map[0, v] = _size;
                     break;
 
                 case 1:
-                    _map[v,_max] = _size;
+                    _map[v, _max] = _size;
                     break;
 
                 case 2:
-                    _map[_max,_max - v] = _size;
+                    _map[_max, _max - v] = _size;
                     break;
 
                 case 3:
-                    _map[_max - v,0] = _size;
+                    _map[_max - v, 0] = _size;
                     break;
 
                 default:
                     throw new ArgumentException();
             }
         }
-
-
-
 
     }
 }
