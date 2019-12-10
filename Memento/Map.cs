@@ -29,6 +29,28 @@ namespace Sky.Memento
             _map[x, y] = val;
         }
 
+        internal void Default(int[] arr)
+        {
+            for (int i = 0; i < arr.Length; i++)
+            {
+                switch (arr[i])
+                {
+                    case 0: 
+                    case 2: 
+                    case 3: 
+                        continue;
+                    case 1: 
+                        SetFor1(i); 
+                        break;
+                    case 4: 
+                        SetForAll(i); 
+                        break;
+                    default: 
+                        throw new ArgumentOutOfRangeException(arr[i].ToString()); 
+                }
+            }
+        }
+
         public void Show()
         {
             Console.WriteLine(new string('-', 20));

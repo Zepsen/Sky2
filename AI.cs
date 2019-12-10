@@ -18,17 +18,16 @@ namespace Sky
             history = new MapHistory(map);
         }
 
-        public void Solve()
+        public void Solve(int[] arr)
         {
             history.Backup();
-
-            map.SetForAll(2);
+            
+            //Set 100%
+            map.Default(arr);
             history.Backup();
+            map.Show();      
+            
 
-            map.Set(1, 1, 2);
-            history.Backup();
-
-            history.Display();
         }
     }
 }
