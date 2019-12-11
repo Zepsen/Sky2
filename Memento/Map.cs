@@ -8,6 +8,7 @@ namespace Sky.Memento
     {
         private int _size = 4;
         private int _max = 3;
+        private int[] _constains = new int[16];
         private List<Field> _map;
         private Field _lastModified;
         private List<int> fullLine = new List<int>(4) { 1, 2, 3, 4 };
@@ -45,6 +46,7 @@ namespace Sky.Memento
 
         internal void Default(int[] arr)
         {
+            _constains = arr;
             for (int i = 0; i < arr.Length; i++)
             {
                 switch (arr[i])
@@ -67,7 +69,7 @@ namespace Sky.Memento
 
         private List<Field> GetLine(int line)
         {
-            return _map.Where(_ => _.X == line).ToList();
+            return _map.Where(_ => _.X == line).OrderBy(_ => _.Y).ToList();
         }
 
         internal Field FirstNotSet()
@@ -77,7 +79,7 @@ namespace Sky.Memento
 
         private List<Field> GetColumn(int col)
         {
-            return _map.Where(_ => _.Y == col).ToList();
+            return _map.Where(_ => _.Y == col).OrderBy(_ => _.X).ToList();
         }
 
         public void Show()
@@ -99,23 +101,38 @@ namespace Sky.Memento
         {
             if (GetField(x, y).IsSet())
             {
-                Console.WriteLine("Value already set for this");
                 return false;
             }
 
-            if (GetLine(x).Any(_ => _.GetValue() == val))
+            var line = GetLine(x);
+            if (line.Any(_ => _.GetValue() == val))
             {
-                Console.WriteLine($"Line x{x} contains this value");
                 return false;
             }
 
-            if (GetColumn(y).Any(_ => _.GetValue() == val))
+            var col = GetColumn(y);
+            if (col.Any(_ => _.GetValue() == val))
             {
-                Console.WriteLine($"Line y{y} contains this value");
                 return false;
             }
+            
+            //if (!IsGoodFor2(line))
+            //{
+            //    return false;
+            //}
+
+            //if(!IsGoodFor2(col))
+            //{
+            //    return false;
+            //}
 
             return true;
+        }
+
+        public bool IsGoodFor2(List<Field> fields)
+        {
+            if (fields.First().GetValue() == 3) return true;
+            return false;
         }
 
         public void SetForAll(int n)
