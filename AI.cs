@@ -49,7 +49,7 @@ namespace Sky
             map.Show();
 
             map.Set(1, 1, 1);
-            //map.Have3();
+            map.SetLastIfHave3();
             history.Backup();
             map.Show();
 

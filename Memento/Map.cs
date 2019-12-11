@@ -10,6 +10,8 @@ namespace Sky.Memento
         private int _max = 3;
         private List<Field> _map;
 
+        private List<int> fullLine = new List<int>(4) { 1, 2, 3, 4 };
+
         public Map(List<Field> map)
         {
             _map = map;
@@ -34,71 +36,31 @@ namespace Sky.Memento
         {
             if (Check(x, y, val))
             {
-                GetField(x,y).SetValue(val);
-                Console.WriteLine($"Set x{x} y{y} - {val}");                
-            }             
+                GetField(x, y).SetValue(val);
+                Console.WriteLine($"Set x{x} y{y} - {val}");
+            }
         }
-        
+
         internal void Default(int[] arr)
         {
             for (int i = 0; i < arr.Length; i++)
             {
                 switch (arr[i])
                 {
-                    case 0: 
-                    case 2: 
-                    case 3: 
+                    case 0:
+                    case 2:
+                    case 3:
                         continue;
-                    case 1: 
-                        SetFor1(i); 
+                    case 1:
+                        SetFor1(i);
                         break;
-                    case 4: 
-                        SetForAll(i); 
+                    case 4:
+                        SetForAll(i);
                         break;
-                    default: 
-                        throw new ArgumentOutOfRangeException(arr[i].ToString()); 
+                    default:
+                        throw new ArgumentOutOfRangeException(arr[i].ToString());
                 }
             }
-        }
-
-        internal void Have3()
-        {
-            for (int i = 0; i < _size; i++)
-            {
-                //var line = GetLine(i);
-                //var column = GetColumn(i);
-
-                //var countX = 0;
-                //var countY = 0;
-
-                //for (int j = 0; j < _size; j++)
-                //{
-                //    if (_map[i, j] > 0) countX++;
-                //    if (_map[j, i] > 0) countY++;
-                //}
-
-                //if (countX == 3)
-                //{
-                //    SetLineFor3X(i);
-                //}
-
-                //if(countY == 3)
-                //{
-                //    SetLineFor3Y(i);
-                //}
-            }
-        }
-
-        private void SetLineFor3X(int i)
-        {
-            Console.WriteLine($"I think this line must have 3 line{i}");
-            var line = GetLine(i);
-            Console.WriteLine(string.Join(' ', line));
-        }
-
-        private void SetLineFor3Y(int i)
-        {
-            Console.WriteLine($"I think this column must have 3 line{i}");
         }
 
         private List<Field> GetLine(int line)
@@ -128,20 +90,22 @@ namespace Sky.Memento
 
         public bool Check(int x, int y, int val)
         {
-            if(GetField(x,y).IsSet())
+            if (GetField(x, y).IsSet())
             {
                 Console.WriteLine("Value already set for this");
                 return false;
             }
 
-            if(GetLine(x).Any(_ => _.GetValue() == val))
+            if (GetLine(x).Any(_ => _.GetValue() == val))
             {
                 Console.WriteLine($"Line x{x} contains this value");
+                return false;
             }
 
-            if(GetColumn(y).Any(_ => _.GetValue() == val))
+            if (GetColumn(y).Any(_ => _.GetValue() == val))
             {
                 Console.WriteLine($"Line y{y} contains this value");
+                return false;
             }
 
             return true;
@@ -189,7 +153,7 @@ namespace Sky.Memento
 
                 default:
                     throw new ArgumentException();
-            }            
+            }
         }
 
         public void SetFor1(int n)
@@ -223,5 +187,42 @@ namespace Sky.Memento
             }
         }
 
+        internal void SetLastIfHave3()
+        {
+            for (int i = 0; i < _size; i++)
+            {
+                var line = GetLine(i);
+                if (line.Count(_ => _.IsSet()) == 3)
+                {
+                    var excepted = fullLine.Except(line.Select(i => i.GetValue()).ToList()).Single();
+                    line.Single(i => !i.IsSet()).SetValue(excepted);
+                    Console.WriteLine($"Have 3 set {excepted}");
+                }
+
+                var col = GetColumn(i);
+                if (col.Count(_ => _.IsSet()) == 3)
+                {
+                    var excepted = fullLine.Except(col.Select(i => i.GetValue()).ToList()).Single();
+                    col.Single(i => !i.IsSet()).SetValue(excepted); ;
+                    Console.WriteLine($"Set {excepted}");
+                };
+            }
+        }
+
+        internal bool IsFinish()
+        {
+            return _map.All(_ => _.IsSet());
+        }
+
+        internal void Randomize()
+        {
+            while(!IsFinish())
+            {
+
+
+
+
+            }
+        }
     }
 }

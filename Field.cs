@@ -15,6 +15,11 @@ namespace Sky
             Value = 0;
         }
 
+        public override string ToString()
+        {
+            return $"X:{X} Y:{Y} - VAL {Value}";
+        }
+
         public int GetValue()
         {
             return this.Value;
