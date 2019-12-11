@@ -1,6 +1,8 @@
-﻿namespace Sky
+﻿using System;
+
+namespace Sky
 {
-    public struct Field
+    public class Field : ICloneable
     {
         public readonly int X;
         public readonly int Y;
@@ -13,6 +15,11 @@
             Value = 0;
         }
 
+        public int GetValue()
+        {
+            return this.Value;
+        }
+
         public void SetValue(int val)
         {
             Value = val;
@@ -21,6 +28,11 @@
         public bool IsSet()
         {
             return Value != 0;
+        }
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
         }
     }
 }

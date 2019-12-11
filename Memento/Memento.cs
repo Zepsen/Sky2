@@ -6,18 +6,18 @@ namespace Sky.Memento
 {
     public interface IMemento
     {
-        int[,] GetState();
+        List<Field> GetState();
     }
 
     public class MapState : IMemento
     {
-        private readonly int[,] _state = new int[,] { };
-        public MapState(int[,] state)
+        private readonly List<Field> _state = new List<Field>();
+        public MapState(List<Field> state)
         {
-            _state = (int[,])state.Clone();
+            state.ForEach(_ => _state.Add((Field)_.Clone()));
         }
 
-        public int[,] GetState()
+        public List<Field> GetState()
         {
             return this._state;
         }

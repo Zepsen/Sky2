@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Sky.Memento
 {
@@ -6,9 +8,9 @@ namespace Sky.Memento
     {
         private int _size = 4;
         private int _max = 3;
-        private int[,] _map;
+        private List<Field> _map;
 
-        public Map(int[,] map)
+        public Map(List<Field> map)
         {
             _map = map;
         }
@@ -23,12 +25,16 @@ namespace Sky.Memento
             _map = memento.GetState();
         }
 
+        public Field GetField(int x, int y)
+        {
+            return _map.Single(_ => _.X == x && _.Y == y);
+        }
 
         public void Set(int x, int y, int val)
         {
             if (Check(x, y, val))
             {
-                _map[x, y] = val;
+                GetField(x,y).SetValue(val);
                 Console.WriteLine($"Set x{x} y{y} - {val}");                
             }             
         }
@@ -62,24 +68,24 @@ namespace Sky.Memento
                 //var line = GetLine(i);
                 //var column = GetColumn(i);
 
-                var countX = 0;
-                var countY = 0;
+                //var countX = 0;
+                //var countY = 0;
 
-                for (int j = 0; j < _size; j++)
-                {
-                    if (_map[i, j] > 0) countX++;
-                    if (_map[j, i] > 0) countY++;
-                }
+                //for (int j = 0; j < _size; j++)
+                //{
+                //    if (_map[i, j] > 0) countX++;
+                //    if (_map[j, i] > 0) countY++;
+                //}
 
-                if (countX == 3)
-                {
-                    SetLineFor3X(i);
-                }
+                //if (countX == 3)
+                //{
+                //    SetLineFor3X(i);
+                //}
 
-                if(countY == 3)
-                {
-                    SetLineFor3Y(i);
-                }
+                //if(countY == 3)
+                //{
+                //    SetLineFor3Y(i);
+                //}
             }
         }
 
@@ -95,58 +101,47 @@ namespace Sky.Memento
             Console.WriteLine($"I think this column must have 3 line{i}");
         }
 
-        private int[] GetLine(int nline)
+        private List<Field> GetLine(int line)
         {
-            var line = new int[4];
-            for (int i = 0; i < _size; i++)
-            {
-                line[i] = _map[nline, i];
-            }
-
-            return line;
+            return _map.Where(_ => _.X == line).ToList();
         }
 
-        private int[] GetColumn(int ncol)
+        private List<Field> GetColumn(int col)
         {
-            var col = new int[4];
-            for (int i = 0; i < _size; i++)
-            {
-                col[i] = _map[i, ncol];
-            }
-
-            return col;
+            return _map.Where(_ => _.Y == col).ToList();
         }
 
         public void Show()
         {
             Console.WriteLine(new string('-', 20));
-            for (int i = 0; i < _size; i++)
+            var i = 0;
+            foreach (var item in _map)
             {
-                for (int j = 0; j < _size; j++)
+                Console.Write(" " + item.GetValue());
+                if (i++ == 3)
                 {
-                    Console.Write(" " + _map[i, j]);
+                    Console.WriteLine();
+                    i = 0;
                 }
-
-                Console.WriteLine();
             }
         }
 
         public bool Check(int x, int y, int val)
         {
-            if(_map[x,y] != 0)
+            if(GetField(x,y).IsSet())
             {
                 Console.WriteLine("Value already set for this");
                 return false;
             }
 
-
-            for (int i = 0; i < _size; i++)
+            if(GetLine(x).Any(_ => _.GetValue() == val))
             {
-                if(_map[x, i] == val || _map[i, y] == val)
-                {
-                    Console.WriteLine($"Already value in line x{x} y{y} - val{val}");                
-                    return false;
-                }
+                Console.WriteLine($"Line x{x} contains this value");
+            }
+
+            if(GetColumn(y).Any(_ => _.GetValue() == val))
+            {
+                Console.WriteLine($"Line y{y} contains this value");
             }
 
             return true;
