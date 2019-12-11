@@ -7,9 +7,11 @@ namespace Sky
     {
         private Map map;
         private MapHistory history;
+        private int[] constrains;
 
-        public AI()
+        public AI(int[] arr)
         {
+            constrains = arr;
             //map = new Map(new int[,] {
             //        { 0, 0, 0, 0 },
             //        { 0, 0, 0, 0 },
@@ -39,10 +41,10 @@ namespace Sky
             history = new MapHistory(map);
         }
 
-        public void Solve(int[] arr)
+        public void Solve()
         {            
             //Set 100%
-            map.Default(arr);
+            map.Default(constrains);
             history.Backup();
 
             map.Set(1, 1, 1);

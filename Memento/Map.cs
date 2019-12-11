@@ -8,7 +8,7 @@ namespace Sky.Memento
     {
         private int _size = 4;
         private int _max = 3;
-        private int[] _constains = new int[16];
+        //private int[] _constains = new int[16];
         private List<Field> _map;
         private Field _lastModified;
         private List<int> fullLine = new List<int>(4) { 1, 2, 3, 4 };
@@ -46,7 +46,7 @@ namespace Sky.Memento
 
         internal void Default(int[] arr)
         {
-            _constains = arr;
+            //_constains = arr;
             for (int i = 0; i < arr.Length; i++)
             {
                 switch (arr[i])
