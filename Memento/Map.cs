@@ -9,7 +9,7 @@ namespace Sky.Memento
         private int _size = 4;
         private int _max = 3;
         private List<Field> _map;
-
+        private Field _lastModified;
         private List<int> fullLine = new List<int>(4) { 1, 2, 3, 4 };
 
         public Map(List<Field> map)
@@ -19,7 +19,7 @@ namespace Sky.Memento
 
         public IMemento Save()
         {
-            return new MapState(_map);
+            return new MapState(_map, _lastModified);
         }
 
         public void Restore(IMemento memento)
@@ -36,7 +36,9 @@ namespace Sky.Memento
         {
             if (Check(x, y, val))
             {
-                GetField(x, y).SetValue(val);
+                var field = GetField(x, y);
+                field.SetValue(val);
+                _lastModified = field;
                 Console.WriteLine($"Set x{x} y{y} - {val}");
             }
         }
@@ -66,6 +68,11 @@ namespace Sky.Memento
         private List<Field> GetLine(int line)
         {
             return _map.Where(_ => _.X == line).ToList();
+        }
+
+        internal Field FirstNotSet()
+        {
+            return _map.First(_ => !_.IsSet());
         }
 
         private List<Field> GetColumn(int col)
@@ -214,15 +221,25 @@ namespace Sky.Memento
             return _map.All(_ => _.IsSet());
         }
 
-        internal void Randomize()
+        public bool SetRandom(Field notset, int start)
         {
-            while(!IsFinish())
+            var res = false;
+            for (int i = start; i < fullLine.Count; i++)
             {
+                if (!Check(notset.X, notset.Y, fullLine[i])) continue;
 
-
-
-
+                Set(notset.X, notset.Y, fullLine[i]);
+                res = true;
+                break;
             }
+
+            return res;            
+        }
+
+        public Field GetLastModified()
+        {
+            return _lastModified;
         }
     }
 }
+

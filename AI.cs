@@ -40,25 +40,60 @@ namespace Sky
         }
 
         public void Solve(int[] arr)
-        {
-            history.Backup();
-            
+        {            
             //Set 100%
             map.Default(arr);
             history.Backup();
-            map.Show();
 
             map.Set(1, 1, 1);
-            map.SetLastIfHave3();
+            //map.SetLastIfHave3();
             history.Backup();
-            map.Show();
+            
 
             map.Set(3, 3, 3);
+            history.Backup();
+
+            Randomize();
+            
+            history.Display();
             map.Show();
 
-            history.Restore();
-            map.Show();
+        }
 
+        internal void Randomize()
+        {
+            var r = 0;
+            while (!map.IsFinish())
+            {
+                map.Show();
+
+                var field = r == 0
+                    ? map.FirstNotSet()
+                    : map.GetLastModified();
+
+                var isSet = map.SetRandom(field, r);
+
+                if(isSet)
+                {                    
+                    history.Backup();
+                    r = 0;
+                }
+                else
+                {
+                    r = Restore(); 
+                }                              
+            }
+        }
+
+        internal int Restore()
+        {
+            if (history.Any())
+            {
+                history.Restore();
+                var last = map.GetLastModified().GetValue();
+                if (last == 4) return Restore();
+                else return ++last;
+            } else return 0;
         }
     }
 }

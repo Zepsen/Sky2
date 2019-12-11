@@ -7,19 +7,28 @@ namespace Sky.Memento
     public interface IMemento
     {
         List<Field> GetState();
+        Field LastModified();
     }
 
     public class MapState : IMemento
     {
         private readonly List<Field> _state = new List<Field>();
-        public MapState(List<Field> state)
+        private Field LastModifiedField = null;
+
+        public MapState(List<Field> state, Field field)
         {
             state.ForEach(_ => _state.Add((Field)_.Clone()));
+            LastModifiedField = field;
         }
 
         public List<Field> GetState()
         {
             return this._state;
+        }
+
+        public Field LastModified()
+        {
+            return this.LastModifiedField;
         }
     }
 
@@ -54,7 +63,15 @@ namespace Sky.Memento
             {
                 var state = new Map(item.GetState());
                 state.Show();
+
+                Console.WriteLine();
+                Console.WriteLine($"LM: {item.LastModified()}");
             }
+        }
+
+        internal bool Any()
+        {
+            return history.Count > 1; //Cause 1 is backup for 100%;
         }
     }
 }
