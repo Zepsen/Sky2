@@ -52,6 +52,7 @@ namespace Sky.Memento
                     Console.WriteLine($"Set x{x} y{y} - {val}");
                 } else
                 {
+                    Console.WriteLine("Constrains failed");
                     field.SetValue(0);
                 }
             }
@@ -178,8 +179,12 @@ namespace Sky.Memento
 
         public bool IsGoodFor2(List<Field> fields, bool fromRight = false)
         {
-            if (fields[0].GetValue() == 4) return false;
-
+            var first = fields[0].GetValue();
+            var third = fields[2].GetValue();
+            var fouth = fields[3].GetValue();
+            if (first == 4) return false;
+            if ((first == 1 || first == 2) && (third == 4 || fouth == 4)) return false;
+            
             return true;
         }
 
