@@ -45,9 +45,37 @@ namespace Sky.Memento
             {
                 var field = GetField(x, y);
                 field.SetValue(val);
-                _lastModified = field;
-                Console.WriteLine($"Set x{x} y{y} - {val}");
+
+                if (CheckConstrains(x, y, val))
+                {
+                    _lastModified = field;
+                    Console.WriteLine($"Set x{x} y{y} - {val}");
+                } else
+                {
+                    field.SetValue(0);
+                }
             }
+        }
+
+        private bool CheckConstrains(int x, int y, int val)
+        {
+            var line = GetLine(x);
+            if (HasRowConstrains(x))
+            {
+                var left = GetLeftRowConstrain(x);
+                if (left == 2 && !IsGoodFor2(line))
+                {
+                    return false;
+                }
+
+                var right = GetRightRowConstrain(x);
+                if (right == 2 && !IsGoodFor2(line, true))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         internal void Default()
@@ -115,30 +143,22 @@ namespace Sky.Memento
             {
                 return false;
             }
-            
+
             var col = GetColumn(y);
             if (col.Any(_ => _.GetValue() == val))
             {
                 return false;
             }
-            
-            
-            //if (!IsGoodFor2(line))
-            //{
-            //    return false;
-            //}
 
-            //if(!IsGoodFor2(col))
-            //{
-            //    return false;
-            //}
+
+
 
             return true;
         }
-        
+
         public bool HasRowConstrains(int x)
         {
-            if (Constrains[4 + x] != 0 || Constrains[15 - x] != 0)
+            if (GetLeftRowConstrain(x) != 0 || GetRightRowConstrain(x) != 0)
             {
                 return true;
             }
@@ -146,10 +166,21 @@ namespace Sky.Memento
             return false;
         }
 
-        public bool IsGoodFor2(List<Field> fields)
+        public int GetLeftRowConstrain(int x)
         {
-            if (fields.First().GetValue() == 3) return true;
-            return false;
+            return Constrains[15 - x];
+        }
+
+        public int GetRightRowConstrain(int x)
+        {
+            return Constrains[4 + x];
+        }
+
+        public bool IsGoodFor2(List<Field> fields, bool fromRight = false)
+        {
+            if (fields[0].GetValue() == 4) return false;
+
+            return true;
         }
 
         public void SetForAll(int n)
@@ -267,7 +298,7 @@ namespace Sky.Memento
                 break;
             }
 
-            return res;            
+            return res;
         }
 
         public Field GetLastModified()

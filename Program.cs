@@ -7,7 +7,7 @@ namespace Sky
     {
         static void Main(string[] args)
         {
-            var arr = new[] { 0, 0, 4, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 };
+            var arr = new[] { 0, 0, 4, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2 };
             new AI(arr).Solve();
         }
     }
