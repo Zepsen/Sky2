@@ -8,14 +8,20 @@ namespace Sky.Memento
     {
         private int _size = 4;
         private int _max = 3;
-        //private int[] _constains = new int[16];
         private List<Field> _map;
         private Field _lastModified;
         private List<int> fullLine = new List<int>(4) { 1, 2, 3, 4 };
 
+        public static int[] Constrains { get; private set; }
+
         public Map(List<Field> map)
         {
             _map = map;
+        }
+
+        public static void SetConstrains(int[] arr)
+        {
+            Constrains = arr;
         }
 
         public IMemento Save()
@@ -44,12 +50,12 @@ namespace Sky.Memento
             }
         }
 
-        internal void Default(int[] arr)
+        internal void Default()
         {
             //_constains = arr;
-            for (int i = 0; i < arr.Length; i++)
+            for (int i = 0; i < Constrains.Length; i++)
             {
-                switch (arr[i])
+                switch (Constrains[i])
                 {
                     case 0:
                     case 2:
@@ -62,7 +68,7 @@ namespace Sky.Memento
                         SetForAll(i);
                         break;
                     default:
-                        throw new ArgumentOutOfRangeException(arr[i].ToString());
+                        throw new ArgumentOutOfRangeException(Constrains[i].ToString());
                 }
             }
         }
@@ -109,12 +115,13 @@ namespace Sky.Memento
             {
                 return false;
             }
-
+            
             var col = GetColumn(y);
             if (col.Any(_ => _.GetValue() == val))
             {
                 return false;
             }
+            
             
             //if (!IsGoodFor2(line))
             //{
@@ -127,6 +134,16 @@ namespace Sky.Memento
             //}
 
             return true;
+        }
+        
+        public bool HasRowConstrains(int x)
+        {
+            if (Constrains[4 + x] != 0 || Constrains[15 - x] != 0)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public bool IsGoodFor2(List<Field> fields)
