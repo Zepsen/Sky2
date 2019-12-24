@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Sky.Memento
 {
@@ -39,8 +40,9 @@ namespace Sky.Memento
             return _map.Single(_ => _.X == x && _.Y == y);
         }
 
-        public void Set(int x, int y, int val)
+        public bool Set(int x, int y, int val)
         {
+            var res = false;
             if (Check(x, y, val))
             {
                 var field = GetField(x, y);
@@ -48,14 +50,18 @@ namespace Sky.Memento
 
                 if (CheckConstrains(x, y, val))
                 {
+                    res = true;
                     _lastModified = field;
                     Console.WriteLine($"Set x{x} y{y} - {val}");
                 } else
                 {
                     Console.WriteLine("Constrains failed");
+                    res = false;
                     field.SetValue(0);
                 }
             }
+
+            return res;
         }
 
         private bool CheckConstrains(int x, int y, int val)
@@ -179,13 +185,21 @@ namespace Sky.Memento
 
         public bool IsGoodFor2(List<Field> fields, bool fromRight = false)
         {
-            var first = fields[0].GetValue();
-            var third = fields[2].GetValue();
-            var fouth = fields[3].GetValue();
-            if (first == 4) return false;
-            if ((first == 1 || first == 2) && (third == 4 || fouth == 4)) return false;
+            var line = DeconstructLine(fields);
+            switch (line)
+            {
+                case var str1 when new Regex(@"(4\d\d\d)").IsMatch(str1):
+                case var str2 when new Regex(@"(214\d)|(\d34\d)").IsMatch(str2):
+                case var str3 when new Regex(@"(\d3\d4)|(\d\d34)").IsMatch(str3):
+                    return false;                
+            };
             
             return true;
+        }
+
+        public string DeconstructLine(List<Field> fields)
+        {
+            return $"{fields[0].GetValue()}{fields[1].GetValue()}{fields[2].GetValue()}{fields[3].GetValue()}";
         }
 
         public void SetForAll(int n)
@@ -293,17 +307,14 @@ namespace Sky.Memento
 
         public bool SetRandom(Field notset, int start)
         {
-            var res = false;
             for (int i = start; i < fullLine.Count; i++)
             {
                 if (!Check(notset.X, notset.Y, fullLine[i])) continue;
 
-                Set(notset.X, notset.Y, fullLine[i]);
-                res = true;
-                break;
+                return Set(notset.X, notset.Y, fullLine[i]);                
             }
 
-            return res;
+            return false;
         }
 
         public Field GetLastModified()
