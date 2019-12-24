@@ -7,33 +7,87 @@ namespace Sky
     public class AiInLine
     {
         private int _size = 0;
+        private readonly List<Line> _lines = new List<Line>();
+        private readonly List<Field> _fields = new List<Field>();
+
         public AiInLine(int[] arr)
         {
             _size = arr.Length / 4;
-            var fields = GenerateFields();
-            var lines = GenerateLines(fields, arr);            
+            _fields = GenerateFields();
+            _lines = GenerateLines(arr);
+        }
+
+        /// <summary>
+        /// Run
+        /// </summary>
+        private void Run()
+        {            
+            SetDefaultValues();
+
+            if (ValidateState())
+                SaveState();
+            else throw new Exception("Wrong default arfs");
+
+            Resolve();            
+        }
+
+        /// <summary>
+        /// Main resolver
+        /// </summary>
+        private void Resolve()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Save current state
+        /// </summary>
+        private void SaveState()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Validate if current state is valid
+        /// </summary>
+        /// <returns>True or False</returns>
+        private bool ValidateState()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Set defaults values if exist, for each lines
+        /// </summary>
+        private void SetDefaultValues()
+        {
+            throw new NotImplementedException();    
         }
 
 
-        private List<Line> GenerateLines(List<Field> fields, int[] constrains)
+
+        #region Builders
+
+        private List<Line> GenerateLines(int[] constrains)
         {
             var lines = new List<Line>();
             Line line = null;
             for (int i = 0; i < _size; i++)
             {
-                //rows
+                //add row
                 line = new Line(
-                    fields.Where(f => f.X == i).ToList(), 
-                    Vector.X, 
-                    constrains[_size * 4 - 1], 
+                    _fields.Where(f => f.X == i).ToList(),
+                    Vector.X,
+                    constrains[_size * 4 - 1],
                     constrains[_size * 2 - 1]);
-                
+
                 lines.Add(line);
-                
-                //cols
-                line = new Line(fields.Where(f => f.Y == i).ToList(), 
-                    Vector.Y, 
-                    constrains[_size - 1], 
+
+                //add col
+                line = new Line(
+                    _fields.Where(f => f.Y == i).ToList(),
+                    Vector.Y,
+                    constrains[_size - 1],
                     constrains[_size * 3 - 1]);
 
                 lines.Add(line);
@@ -64,5 +118,7 @@ namespace Sky
                 new Field(3, 3),
             };
         }
+
+        #endregion
     }
 }

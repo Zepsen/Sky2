@@ -25,6 +25,24 @@ namespace Sky
             _rightConstraint = rightConstraint;
         }
 
+        public bool HasConstrains()
+        {
+            return _leftConstraint > 0 || _rightConstraint > 0;
+        }
 
+        public bool CheckLine()
+        {
+            if (!HasConstrains()) return true;
+
+            //if cons = 1 check correct position of first field
+
+            //if cons = 2 check that i can't see more than 2
+
+            //if cons = 3 
+
+            //if cons = 4 check if can see all
+
+            return false;
+        }
     }
 }
