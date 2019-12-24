@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Sky
+namespace Sky.Version2
 {
     public enum Vector
     {
